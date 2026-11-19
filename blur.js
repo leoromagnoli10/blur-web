@@ -330,11 +330,11 @@ var tm; new MutationObserver(function(){clearTimeout(tm);tm=setTimeout(build,300
 (function(){
 var T={
 regular:{n:"Regular fit",s:["S","M","L","XL"],c:["Largo","Ancho","Manga"],m:[[67,56,38],[69,58,40],[71,60,42],[74,62,44]],b:"top"},
-boxy:{n:"Boxy fit",s:["S","M","L","XL"],c:["Largo","Ancho","Manga"],m:[[65,65,50],[68,68,51],[71,70,52],[74,72,53]],b:"top",w:0.6,o:-0.3},
-waffle:{n:"Manga larga raglan",s:["S","M","L","XL"],c:["Largo","Ancho","Manga"],m:[[66,60,79],[68,62,81],[70,64,83],[72,66,85]],b:"top"},
-hoodie:{n:"Corte regular",s:["S","M","L","XL"],c:["Largo","Ancho","Mangas"],m:[[64,58,64],[66,61,66],[68,64,68],[70,66,70]],b:"top"},
+boxy:{n:"Boxy fit",s:["S","M","L","XL"],c:["Largo","Ancho","Manga"],m:[[65,65,50],[68,68,51],[71,70,52],[74,72,53]],b:"top",w:0.5,o:-0.4},
+waffle:{n:"Manga larga raglan",s:["S","M","L","XL"],c:["Largo","Ancho","Manga"],m:[[66,60,79],[68,62,81],[70,64,83],[72,66,85]],b:"top",w:0.85,o:-0.25},
+hoodie:{n:"Corte regular",s:["S","M","L","XL"],c:["Largo","Ancho","Mangas"],m:[[64,58,64],[66,61,66],[68,64,68],[70,66,70]],b:"top",w:0.85,o:-0.2},
 zipg:{n:"Zip hoodie regular",s:["S","M","L","XL"],c:["Largo","Ancho"],m:[[60,57],[63,58],[66,59],[69,60]],b:"top"},
-zipb:{n:"Campera frisa",s:["S","M","L","XL"],c:["Largo","Ancho"],m:[[64,62],[66,64],[68,66],[70,68]],b:"top"},
+zipb:{n:"Campera frisa",s:["S","M","L","XL"],c:["Largo","Ancho"],m:[[64,62],[66,64],[68,66],[70,68]],b:"top",w:0.8,o:-0.3},
 jogging:{n:"Jogging",s:["S","M","L","XL"],c:["Cintura","Largo","Rodilla"],m:[[34,100,33],[36,102,34],[38,104,35],[40,106,36]],b:"pant"},
 shorts:{n:"Corte baggy",s:["S","M","L","XL"],c:["Largo","Cintura"],m:[[53,"36-42"],[54,"38-44"],[55,"40-46"],[56,"42-48"]],b:"short"},
 polomc:{n:"Polo manga corta",s:["1","2","3"],c:["Largo","Ancho","Manga"],m:[[66,60,47],[70,64,48],[74,68,49]],b:"three",w:0.7},
@@ -344,16 +344,15 @@ shirt:{n:"Fit intermedio",s:["1","2","3"],c:["Largo","Ancho"],m:[[60,58],[62,60]
 var MAP=[["paisley-monogram-tee","regular"],["lettering-tee","regular"],["icon-tee","regular"],["do-your-thing-tee","regular"],["tartan-monogram-tee","regular"],["more-life-tee","boxy"],["birds-tee","boxy"],["blue-camo-waffle-tee","waffle"],["stitches-hoodie","hoodie"],["gothic-purple-zip","zipg"],["zip-hoodie-btw","zipb"],["stitches-pants","jogging"],["jogging-btw","jogging"],["baggy-shorts","shorts"],["emblem-white-polo","polomc"],["emblem-black-polo","polomc"],["everyday-heat","poloml"],["signature-zip-shirt","shirt"]];
 function tableFor(){var p=decodeURIComponent(location.pathname);for(var i=0;i<MAP.length;i++){if(p.indexOf(MAP[i][0])>-1)return T[MAP[i][1]];}return null;}
 function bands(b){
-if(b==="pant")return [[0,169,0.2],[170,174,0.7],[175,179,1.2],[180,184,2.2],[185,250,3]];
-if(b==="short")return [[0,169,0.4],[170,174,0.9],[175,179,1.3],[180,184,1.9],[185,250,2.5]];
-if(b==="three")return [[0,169,0.2],[170,174,0.5],[175,179,1],[180,184,1.5],[185,250,2]];
-return [[0,169,0.2],[170,174,0.8],[175,179,1.6],[180,184,2.3],[185,250,3]];
+if(b==="pant")return [[0,169,0.75],[170,174,1.25],[175,179,1.718],[180,184,2.462],[185,250,2.95]];
+if(b==="short")return [[0,169,0.95],[170,174,1.45],[175,179,1.818],[180,184,2.162],[185,250,2.378]];
+if(b==="three")return [[0,169,0.75],[170,174,1.05],[175,179,1.518],[180,184,1.762],[185,250,1.878]];
+return [[0,169,0.904],[170,174,1.102],[175,179,1.98],[180,184,2.288],[185,250,3.292]];
 }
 function score(tb,h,w,fit){
 var bs=bands(tb.b),base=0;
 for(var i=0;i<bs.length;i++){if(h>=bs[i][0]&&h<=bs[i][1]){base=bs[i][2];break;}}
-var bmi=w/Math.pow(h/100,2),adj=0;
-if(bmi<18.5)adj=-0.9;else if(bmi<20.5)adj=-0.5;else if(bmi<22.5)adj=-0.25;else if(bmi<26)adj=0;else if(bmi<28.5)adj=0.5;else if(bmi<31)adj=1;else if(bmi<34)adj=1.5;else adj=1.9;
+var adj=0.064*(w-81); if(adj<-0.8)adj=-0.8; if(adj>1.6)adj=1.6;
 base=base+adj*(tb.w===undefined?1:tb.w)+(tb.o||0)+(fit==="aj"?-0.6:(fit==="ho"?0.6:0));
 var max=tb.s.length-1;
 if(base<0)base=0; if(base>max)base=max;
